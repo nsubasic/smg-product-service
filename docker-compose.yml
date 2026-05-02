@@ -1,0 +1,16 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: product-postgres
+    environment:
+      POSTGRES_DB: productdb
+      POSTGRES_USER: productuser
+      POSTGRES_PASSWORD: productpass
+    ports:
+      - "5432:5432"
+
+  kafka:
+    image: apache/kafka:4.1.2
+    container_name: product-kafka
+    ports:
+      - "9092:9092"
