@@ -21,20 +21,18 @@ Simple Spring Boot service for managing products and publishing events when a pr
 - List products (paginated)
 - Validation (name not empty, price > 0)
 - Publish `product.created` event to Kafka
-- Unit, controller, and integration tests
+- Unit tests for service and controller tests
+- Integration tests
 
 ---
+## Docker Setup
 
-## Architecture
+This project uses Docker Compose to run external dependencies.
 
-```
-Controller → Service → Repository → PostgreSQL
-                       ↓
-                    Kafka Producer → product.created topic
-```
+### Prerequisites
 
+- Docker Desktop installed and running
 ---
-
 ## Running Locally
 
 ### 1. Start dependencies
@@ -80,8 +78,8 @@ Content-Type: application/json
 
 ```json
 {
-  "name": "BMW 320d",
-  "price": 25000
+  "name": "Product name",
+  "price": 12345.67
 }
 ```
 
@@ -90,8 +88,8 @@ Response:
 ```json
 {
   "id": "uuid",
-  "name": "BMW 320d",
-  "price": 25000,
+  "name": "Product name",
+  "price": 12345.67,
   "createdAt": "2026-05-02T12:25:49Z"
 }
 ```
@@ -127,8 +125,8 @@ Example message:
 ```json
 {
   "productId": "uuid",
-  "name": "BMW 320d",
-  "price": 25000,
+  "name": "Product name",
+  "price": 12345.67,
   "occurredAt": "2026-05-02T12:54:57Z"
 }
 ```
@@ -186,35 +184,11 @@ Windows:
 - Unit tests (service layer)
 - Controller tests (`@WebMvcTest`)
 - Integration tests:
-    - PostgreSQL Testcontainer
-    - Kafka Testcontainer
-    - Full flow: HTTP → DB → Kafka
+  - PostgreSQL Testcontainer
+  - Kafka Testcontainer
+  - Full flow: HTTP -> DB -> Kafka
 
 ---
+## Security
 
-## Design Decisions
-
-- No Flyway (schema handled via JPA for MVP simplicity)
-- Event-driven approach using Kafka
-- Validation at API layer
-- Testcontainers for realistic integration testing
-
----
-
-## Possible Improvements
-
-- Outbox pattern for guaranteed event delivery
-- Idempotency for create operations
-- Retry + DLQ for Kafka failures
-- OpenAPI / Swagger documentation
-- Authentication / authorization
-- Dockerized application container
-
----
-
-## Notes
-
-This project focuses on:
-- clean architecture
-- realistic integration testing
-- event-driven communication
+Authentication and authorization are intentionally out of scope for this MVP. In a production environment, the service would be protected using OAuth2/JWT or integrated with the platform's existing identity provider.
