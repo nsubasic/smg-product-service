@@ -9,5 +9,4 @@ public record ProductResponse(
         String name,
         BigDecimal price,
         Instant createdAt
-) {
-}
+) {}

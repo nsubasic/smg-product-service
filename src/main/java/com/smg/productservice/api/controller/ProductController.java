@@ -4,6 +4,8 @@ import com.smg.productservice.api.dto.CreateProductRequest;
 import com.smg.productservice.api.dto.ProductResponse;
 import com.smg.productservice.domain.ProductService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.UUID;
 @RequestMapping("/products")
 public class ProductController {
 
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -23,9 +27,9 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductResponse> createProduct(
-            @Valid @RequestBody CreateProductRequest request
-    ) {
+    public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody CreateProductRequest request) {
+        log.info("Received request to create product");
+
         ProductResponse response = productService.createProduct(request);
 
         return ResponseEntity
@@ -35,6 +39,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponse> getProductById(@PathVariable UUID id) {
+        log.info("Fetching product id={}", id);
         return ResponseEntity.ok(productService.getProductById(id));
     }
 

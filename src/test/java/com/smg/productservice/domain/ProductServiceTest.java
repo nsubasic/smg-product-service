@@ -1,8 +1,10 @@
 package com.smg.productservice.domain;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smg.productservice.api.dto.CreateProductRequest;
 import com.smg.productservice.api.dto.ProductResponse;
-import com.smg.productservice.event.ProductEventPublisher;
+import com.smg.productservice.outbox.OutboxEvent;
+import com.smg.productservice.outbox.OutboxEventRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.data.domain.Page;
@@ -14,26 +16,34 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 class ProductServiceTest {
 
     private final ProductRepository productRepository = mock(ProductRepository.class);
-    private final ProductEventPublisher productEventPublisher = mock(ProductEventPublisher.class);
+    private final OutboxEventRepository outboxEventRepository = mock(OutboxEventRepository.class);
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private final ProductService productService =
-            new ProductService(productRepository, productEventPublisher);
+            new ProductService(productRepository, outboxEventRepository, objectMapper);
 
     private static final String PRODUCT_NAME_VALID = "Product 1";
     private static final BigDecimal PRODUCT_PRICE_VALID = BigDecimal.valueOf(12345.67);
 
     @Test
-    void createProduct_savesProductAndPublishesEvent() {
+    void createProduct_savesProductAndCreatesOutboxEvent() {
         CreateProductRequest request =
                 new CreateProductRequest(PRODUCT_NAME_VALID, PRODUCT_PRICE_VALID);
 
         when(productRepository.save(any(Product.class)))
-                .thenAnswer(invocation -> invocation.getArgument(0));
+                .thenAnswer(invocation -> {
+                    Product product = invocation.getArgument(0);
+                    product.setId(UUID.randomUUID());
+                    return product;
+                });
 
         ProductResponse response = productService.createProduct(request);
 
@@ -46,7 +56,12 @@ class ProductServiceTest {
         assertThat(productCaptor.getValue().getName()).isEqualTo(PRODUCT_NAME_VALID);
         assertThat(productCaptor.getValue().getPrice()).isEqualByComparingTo(PRODUCT_PRICE_VALID);
 
-        verify(productEventPublisher).publishProductCreated(any());
+        ArgumentCaptor<OutboxEvent> outboxCaptor = ArgumentCaptor.forClass(OutboxEvent.class);
+        verify(outboxEventRepository).save(outboxCaptor.capture());
+
+        assertThat(outboxCaptor.getValue().getTopic()).isEqualTo("product.created");
+        assertThat(outboxCaptor.getValue().getPayload()).contains(PRODUCT_NAME_VALID);
+        assertThat(outboxCaptor.getValue().getPayload()).contains(PRODUCT_PRICE_VALID.toString());
     }
 
     @Test

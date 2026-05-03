@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "products")
-@Getter
+@Data
 public class Product {
 
     @Id
