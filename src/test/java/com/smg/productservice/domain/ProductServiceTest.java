@@ -65,6 +65,26 @@ class ProductServiceTest {
     }
 
     @Test
+    void getProductById_whenProductExists_returnsProduct() {
+        UUID id = UUID.randomUUID();
+
+        Product product = new Product();
+        product.setId(id);
+        product.setName(PRODUCT_NAME_VALID);
+        product.setPrice(PRODUCT_PRICE_VALID);
+
+        when(productRepository.findById(id)).thenReturn(Optional.of(product));
+
+        ProductResponse response = productService.getProductById(id);
+
+        assertThat(response.id()).isEqualTo(id);
+        assertThat(response.name()).isEqualTo(PRODUCT_NAME_VALID);
+        assertThat(response.price()).isEqualByComparingTo(PRODUCT_PRICE_VALID);
+
+        verify(productRepository).findById(id);
+    }
+
+    @Test
     void getProductById_whenProductDoesNotExist_throwsException() {
         UUID id = UUID.randomUUID();
 

@@ -1,0 +1,23 @@
+2026-05-03T19:37:28.138+02:00  INFO 23228 --- [product-service] [main] c.s.p.ProductServiceApplication          : Starting ProductServiceApplication using Java 21.0.10 with PID 23228 (C:\Users\Nikola\SMG\smg-product-service\target\classes started by Nikola in C:\Users\Nikola\SMG\smg-product-service)
+2026-05-03T19:37:28.141+02:00  INFO 23228 --- [product-service] [main] c.s.p.ProductServiceApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-05-03T19:37:28.765+02:00  INFO 23228 --- [product-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-03T19:37:28.813+02:00  INFO 23228 --- [product-service] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 39 ms. Found 2 JPA repository interfaces.
+2026-05-03T19:37:29.379+02:00  INFO 23228 --- [product-service] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-05-03T19:37:29.430+02:00  INFO 23228 --- [product-service] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1249 ms
+2026-05-03T19:37:30.024+02:00  INFO 23228 --- [product-service] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-03T19:37:31.153+02:00  INFO 23228 --- [product-service] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-03T19:37:31.218+02:00  INFO 23228 --- [product-service] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-03T19:37:31.822+02:00  INFO 23228 --- [product-service] [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 2 endpoints beneath base path '/actuator'
+2026-05-03T19:37:31.889+02:00  INFO 23228 --- [product-service] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-05-03T19:37:31.900+02:00  INFO 23228 --- [product-service] [main] c.s.p.ProductServiceApplication          : Started ProductServiceApplication in 4.23 seconds (process running for 4.579)
+2026-05-03T19:37:36.780+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-03T19:37:36.782+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-05-03T19:37:36.896+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] c.s.p.api.controller.ProductController   : Received request to create product
+2026-05-03T19:37:36.901+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] c.s.p.domain.ProductService              : Creating product with name=Product 10
+2026-05-03T19:37:36.921+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] c.s.p.domain.ProductService              : Product created with id=784c1c3a-a463-4f24-bb88-6b320c6763fb
+2026-05-03T19:37:36.975+02:00  INFO 23228 --- [product-service] [http-nio-8080-exec-1] c.s.p.domain.ProductService              : Outbox event created for productId=784c1c3a-a463-4f24-bb88-6b320c6763fb
+2026-05-03T19:37:37.313+02:00  INFO 23228 --- [product-service] [scheduling-1] c.s.p.outbox.OutboxPublisher             : Publishing 1 outbox event(s)
+2026-05-03T19:37:37.782+02:00  INFO 23228 --- [product-service] [scheduling-1] c.s.p.outbox.OutboxPublisher             : Published outbox event id=30e797d3-bdbf-4497-b14a-435d58ae704d topic=product.created key=784c1c3a-a463-4f24-bb88-6b320c6763fb
+2026-05-03T19:40:03.337+02:00  INFO 23228 --- [product-service] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-03T19:40:03.349+02:00  INFO 23228 --- [product-service] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-03T19:40:03.364+02:00  INFO 23228 --- [product-service] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'

@@ -22,6 +22,7 @@ import java.util.UUID;
 @Service
 public class ProductService {
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
+    public static final String PRODUCT_CREATED_TOPIC = "product.created";
     private final ProductRepository productRepository;
     private final OutboxEventRepository outboxEventRepository;
     private final ObjectMapper objectMapper;
@@ -38,7 +39,7 @@ public class ProductService {
 
     @Transactional
     public ProductResponse createProduct(CreateProductRequest request) {
-        log.info("Creating product with name={}", request.name());
+        log.debug("Creating product with name={}", request.name());
 
         Product product = new Product(request.name(), request.price());
         Product savedProduct = productRepository.save(product);
@@ -56,7 +57,7 @@ public class ProductService {
             String payload = objectMapper.writeValueAsString(event);
 
             OutboxEvent outboxEvent = new OutboxEvent(
-                    "product.created",
+                    PRODUCT_CREATED_TOPIC,
                     savedProduct.getId().toString(),
                     payload
             );
